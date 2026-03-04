@@ -83,11 +83,11 @@ export default function Index({ publication, initialPosts, initialPageInfo }: Pr
 						}}
 					/>
 				</Head>
-				<Container className="mx-auto flex max-w-3xl flex-col items-stretch gap-10 px-5 py-10">
+				<Container className="mx-auto flex max-w-4xl flex-col items-stretch gap-2 px-5 py-10">
 					<PersonalHeader />
 					{posts.length > 0 && <MinimalPosts context="home" posts={posts} />}
 					{!loadedMore && pageInfo.hasNextPage && pageInfo.endCursor && (
-						<button onClick={loadMore}>
+						<button onClick={loadMore} className="mt-4 w-full rounded-lg bg-[#007acc] px-4 py-2 text-white hover:bg-blue-700 transition-colors">
 							Load more
 						</button>
 					)}
