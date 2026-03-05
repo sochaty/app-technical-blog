@@ -16,6 +16,8 @@ import {
 	TagPostsByPublicationQuery,
 	TagPostsByPublicationQueryVariables,
 } from '../../generated/graphql';
+import { useState } from 'react';
+import { SubscribeModal } from '../../components/subscribe-modal';
 
 type Props = {
 	posts: PostFragment[];
@@ -25,6 +27,9 @@ type Props = {
 
 export default function Tag({ publication, posts, tag }: Props) {
 	const title = `#${tag} - ${publication.title}`;
+
+	// State to handle the subscription popup
+		const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
 	return (
 		<AppProvider publication={publication}>
@@ -45,7 +50,7 @@ export default function Tag({ publication, posts, tag }: Props) {
 					/>
 				</Head>
 				<Container className="mx-auto flex max-w-3xl flex-col items-stretch gap-10 px-5 py-10">
-					<PersonalHeader />
+					<PersonalHeader onSubscribeClick={() => setIsSubscribeOpen(true)}/>
 					<div className="flex flex-col gap-1 pt-5">
 						<p className="font-bold uppercase text-slate-500 dark:text-neutral-400">Tag</p>
 						<h1 className="text-4xl font-bold text-slate-900 dark:text-neutral-50">#{tag}</h1>
@@ -53,6 +58,12 @@ export default function Tag({ publication, posts, tag }: Props) {
 					{posts.length > 0 && <MinimalPosts context="home" posts={posts} />}
 					<Footer />
 				</Container>
+				{/* The Modal remains outside the main container flow */}
+								<SubscribeModal
+									show={isSubscribeOpen}
+									onClose={() => setIsSubscribeOpen(false)}
+									publicationId="694f814bf55ea4d949e56af7"
+								/>
 			</Layout>
 		</AppProvider>
 	);

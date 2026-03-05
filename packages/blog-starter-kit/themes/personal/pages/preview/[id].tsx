@@ -14,19 +14,23 @@ import {
 	DraftByIdDocument,
 	DraftByIdQuery,
 	DraftByIdQueryVariables,
-	Post,
+	Post as PostType,
 	Publication,
 	PublicationByHostDocument,
 	PublicationByHostQuery,
 	PublicationByHostQueryVariables,
 } from '../../generated/graphql';
+import { useState } from 'react';
+import { SubscribeModal } from '../../components/subscribe-modal';
 
 type Props = {
-	post: Post;
+	post: PostType;
 	publication: Publication;
 };
 
 export default function Post({ publication, post }: Props) {
+	// State to handle the subscription popup
+	const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 	if (!post) {
 		return <ErrorPage statusCode={404} />;
 	}
@@ -35,10 +39,10 @@ export default function Post({ publication, post }: Props) {
 
 	const coverImageSrc = !!post.coverImage?.url
 		? resizeImage(post.coverImage.url, {
-				w: 1600,
-				h: 840,
-				c: 'thumb',
-		  })
+			w: 1600,
+			h: 840,
+			c: 'thumb',
+		})
 		: undefined;
 
 	const tagsList = post.tags?.map((tag) => (
@@ -56,7 +60,7 @@ export default function Post({ publication, post }: Props) {
 		<AppProvider publication={publication} post={post}>
 			<Layout>
 				<Container className="mx-auto flex max-w-3xl flex-col items-stretch gap-10 px-5 py-10">
-					<PersonalHeader />
+					<PersonalHeader onSubscribeClick={() => setIsSubscribeOpen(true)} />
 					<article className="flex flex-col items-start gap-10 pb-10">
 						<Head>
 							<title>{post.seo?.title || post.title}</title>
@@ -79,6 +83,12 @@ export default function Post({ publication, post }: Props) {
 					</article>
 					<Footer />
 				</Container>
+				{/* The Modal remains outside the main container flow */}
+				<SubscribeModal
+					show={isSubscribeOpen}
+					onClose={() => setIsSubscribeOpen(false)}
+					publicationId="694f814bf55ea4d949e56af7"
+				/>
 			</Layout>
 		</AppProvider>
 	);
