@@ -22,6 +22,7 @@ import {
 	PostsByPublicationQueryVariables,
 	PublicationFragment,
 } from '../generated/graphql';
+import { SubscribeModal } from '../components/subscribe-modal';
 
 const GQL_ENDPOINT = process.env.NEXT_PUBLIC_HASHNODE_GQL_ENDPOINT;
 
@@ -35,6 +36,9 @@ export default function Index({ publication, initialPosts, initialPageInfo }: Pr
 	const [posts, setPosts] = useState<PostFragment[]>(initialPosts);
 	const [pageInfo, setPageInfo] = useState<Props['initialPageInfo']>(initialPageInfo);
 	const [loadedMore, setLoadedMore] = useState(false);
+
+	// State to handle the subscription popup
+	const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
 	const loadMore = async () => {
 		const data = await request<MorePostsByPublicationQuery, MorePostsByPublicationQueryVariables>(
@@ -65,7 +69,7 @@ export default function Index({ publication, initialPosts, initialPageInfo }: Pr
 							publication.descriptionSEO || publication.title || `${publication.author.name}'s Blog`
 						}
 					/>
-					<meta property="twitter:card" content="summary_large_image"/>
+					<meta property="twitter:card" content="summary_large_image" />
 					<meta property="twitter:title" content={publication.displayTitle || publication.title || 'Hashnode Blog Starter Kit'} />
 					<meta property="twitter:description" content={publication.descriptionSEO || publication.title || `${publication.author.name}'s Blog`} />
 					<meta
@@ -84,7 +88,7 @@ export default function Index({ publication, initialPosts, initialPageInfo }: Pr
 					/>
 				</Head>
 				<Container className="mx-auto flex max-w-4xl flex-col items-stretch gap-2 px-5 py-10">
-					<PersonalHeader />
+					<PersonalHeader onSubscribeClick={() => setIsSubscribeOpen(true)} />
 					{posts.length > 0 && <MinimalPosts context="home" posts={posts} />}
 					{!loadedMore && pageInfo.hasNextPage && pageInfo.endCursor && (
 						<button onClick={loadMore} className="mt-4 w-full rounded-lg bg-[#007acc] px-4 py-2 text-white hover:bg-blue-700 transition-colors">
@@ -97,6 +101,12 @@ export default function Index({ publication, initialPosts, initialPageInfo }: Pr
 
 					<Footer />
 				</Container>
+				{/* The Modal remains outside the main container flow */}
+				<SubscribeModal
+					show={isSubscribeOpen}
+					onClose={() => setIsSubscribeOpen(false)}
+					publicationId="694f814bf55ea4d949e56af7"
+				/>
 			</Layout>
 		</AppProvider>
 	);
