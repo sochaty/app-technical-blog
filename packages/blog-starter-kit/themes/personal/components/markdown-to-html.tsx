@@ -3,19 +3,23 @@ import { markdownToHtml } from '@starter-kit/utils/renderer/markdownToHtml';
 import { memo } from 'react';
 
 type Props = {
-	contentMarkdown: string;
+    contentMarkdown: string;
 };
 
-const _MarkdownToHtml = ({ contentMarkdown }: Props) => {
-	const content = markdownToHtml(contentMarkdown);
-	useEmbeds({ enabled: true });
+// 1. Rename _MarkdownToHtml to InternalMarkdownToHtml (or similar PascalCase)
+const MarkdownToHtmlComponent = ({ contentMarkdown }: Props) => {
+    const content = markdownToHtml(contentMarkdown);
+    
+    // Now React recognizes this is a component, so useEmbeds is allowed!
+    useEmbeds({ enabled: true });
 
-	return (
-		<div
-			className="hashnode-content-style mx-auto w-full px-5 md:max-w-screen-md"
-			dangerouslySetInnerHTML={{ __html: content }}
-		/>
-	);
+    return (
+        <div
+            className="hashnode-content-style mx-auto w-full px-5 md:max-w-screen-md"
+            dangerouslySetInnerHTML={{ __html: content }}
+        />
+    );
 };
 
-export const MarkdownToHtml = memo(_MarkdownToHtml);
+// 2. Export the memoized version using the original name
+export const MarkdownToHtml = memo(MarkdownToHtmlComponent);

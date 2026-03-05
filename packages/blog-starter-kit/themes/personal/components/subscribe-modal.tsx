@@ -44,7 +44,7 @@ export const SubscribeModal = ({ show, onClose, publicationId }: { show: boolean
                 {status === 'success' ? (
                     <div className="text-center py-6 animate-in fade-in zoom-in">
                         <CheckCircle2 className="mx-auto text-[#38bdf8] mb-4" size={48} />
-                        <h3 className="text-2xl font-bold text-white">You're in!</h3>
+                        <h3 className="text-2xl font-bold text-white">You&apos;re in!</h3>
                         <p className="mt-2 text-slate-400">Check your inbox to confirm your subscription to the AI Lab.</p>
                         <button onClick={onClose} className="mt-6 text-[#38bdf8] font-bold hover:underline">Back to reading</button>
                     </div>
